@@ -1,0 +1,312 @@
+═══════════════════════════════════════════════════════════════════════════════
+                    COVOITURAGE - AUTH REQUESTS TO TEST
+═══════════════════════════════════════════════════════════════════════════════
+
+BASE URL: http://localhost:3000
+
+═══════════════════════════════════════════════════════════════════════════════
+1️⃣  REGISTER
+═══════════════════════════════════════════════════════════════════════════════
+
+METHOD: POST
+URL: http://localhost:3000/auth/register
+
+HEADERS:
+Content-Type: application/json
+
+BODY (raw JSON):
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123",
+  "phone": "+33612345678"
+}
+
+EXPECTED RESPONSE (200):
+{
+  "message": "User registered successfully",
+  "user": {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com"
+  },
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "expiresIn": "15m"
+}
+
+💡 SAVE TOKENS:
+   accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+   refreshToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+═══════════════════════════════════════════════════════════════════════════════
+2️⃣  LOGIN
+═══════════════════════════════════════════════════════════════════════════════
+
+METHOD: POST
+URL: http://localhost:3000/auth/login
+
+HEADERS:
+Content-Type: application/json
+
+BODY (raw JSON):
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+
+EXPECTED RESPONSE (200):
+{
+  "message": "Login successful",
+  "user": {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com"
+  },
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "expiresIn": "15m"
+}
+
+💡 SAVE TOKENS:
+   accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+   refreshToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+═══════════════════════════════════════════════════════════════════════════════
+3️⃣  REFRESH TOKEN
+═══════════════════════════════════════════════════════════════════════════════
+
+METHOD: POST
+URL: http://localhost:3000/auth/refresh
+
+HEADERS:
+Content-Type: application/json
+
+BODY (raw JSON):
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+
+EXPECTED RESPONSE (200):
+{
+  "message": "Token refreshed successfully",
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (NOUVEAU)",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (NOUVEAU)",
+  "expiresIn": "15m"
+}
+
+💡 SAVE NEW TOKENS (rotation):
+   accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (nouveau)
+   refreshToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (nouveau)
+
+═══════════════════════════════════════════════════════════════════════════════
+4️⃣  LOGOUT
+═══════════════════════════════════════════════════════════════════════════════
+
+METHOD: POST
+URL: http://localhost:3000/auth/logout
+
+HEADERS:
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+BODY (raw JSON):
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+
+EXPECTED RESPONSE (200):
+{
+  "message": "Logout successful"
+}
+
+═══════════════════════════════════════════════════════════════════════════════
+❌ TEST CASES - CAS D'ERREUR
+═══════════════════════════════════════════════════════════════════════════════
+
+❌ TEST 1: REGISTER - Email Déjà Existant
+─────────────────────────────────────────────────────────────────────────────
+
+METHOD: POST
+URL: http://localhost:3000/auth/register
+
+HEADERS:
+Content-Type: application/json
+
+BODY (raw JSON):
+{
+  "name": "Jane Doe",
+  "email": "john@example.com",
+  "password": "password123",
+  "phone": "+33612345678"
+}
+
+EXPECTED RESPONSE (409):
+{
+  "statusCode": 409,
+  "message": "Email already exists",
+  "error": "Conflict"
+}
+
+═══════════════════════════════════════════════════════════════════════════════
+
+❌ TEST 2: LOGIN - Mauvais Password
+─────────────────────────────────────────────────────────────────────────────
+
+METHOD: POST
+URL: http://localhost:3000/auth/login
+
+HEADERS:
+Content-Type: application/json
+
+BODY (raw JSON):
+{
+  "email": "john@example.com",
+  "password": "wrongpassword"
+}
+
+EXPECTED RESPONSE (401):
+{
+  "statusCode": 401,
+  "message": "Invalid email or password",
+  "error": "Unauthorized"
+}
+
+═══════════════════════════════════════════════════════════════════════════════
+
+❌ TEST 3: LOGIN - Email N'existe Pas
+─────────────────────────────────────────────────────────────────────────────
+
+METHOD: POST
+URL: http://localhost:3000/auth/login
+
+HEADERS:
+Content-Type: application/json
+
+BODY (raw JSON):
+{
+  "email": "nonexistent@example.com",
+  "password": "password123"
+}
+
+EXPECTED RESPONSE (401):
+{
+  "statusCode": 401,
+  "message": "Invalid email or password",
+  "error": "Unauthorized"
+}
+
+═══════════════════════════════════════════════════════════════════════════════
+
+❌ TEST 4: REFRESH - Token Invalide
+─────────────────────────────────────────────────────────────────────────────
+
+METHOD: POST
+URL: http://localhost:3000/auth/refresh
+
+HEADERS:
+Content-Type: application/json
+
+BODY (raw JSON):
+{
+  "refreshToken": "invalid_token_xyz"
+}
+
+EXPECTED RESPONSE (401):
+{
+  "statusCode": 401,
+  "message": "Invalid refresh token",
+  "error": "Unauthorized"
+}
+
+═══════════════════════════════════════════════════════════════════════════════
+
+❌ TEST 5: REFRESH APRÈS LOGOUT (Token Révoqué)
+─────────────────────────────────────────────────────────────────────────────
+
+METHOD: POST
+URL: http://localhost:3000/auth/refresh
+
+HEADERS:
+Content-Type: application/json
+
+BODY (raw JSON):
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (token revoqué)"
+}
+
+EXPECTED RESPONSE (401):
+{
+  "statusCode": 401,
+  "message": "Invalid or revoked refresh token",
+  "error": "Unauthorized"
+}
+
+═══════════════════════════════════════════════════════════════════════════════
+
+❌ TEST 6: LOGOUT - Pas de Authorization Header
+─────────────────────────────────────────────────────────────────────────────
+
+METHOD: POST
+URL: http://localhost:3000/auth/logout
+
+HEADERS:
+Content-Type: application/json
+
+BODY (raw JSON):
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+
+EXPECTED RESPONSE (401):
+{
+  "statusCode": 401,
+  "message": "Unauthorized"
+}
+
+═══════════════════════════════════════════════════════════════════════════════
+
+❌ TEST 7: LOGOUT - Access Token Invalide
+─────────────────────────────────────────────────────────────────────────────
+
+METHOD: POST
+URL: http://localhost:3000/auth/logout
+
+HEADERS:
+Content-Type: application/json
+Authorization: Bearer invalid_token_xyz
+
+BODY (raw JSON):
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+
+EXPECTED RESPONSE (401):
+{
+  "statusCode": 401,
+  "message": "Unauthorized"
+}
+
+═══════════════════════════════════════════════════════════════════════════════
+📋 FLUX COMPLET DE TEST (DANS L'ORDRE)
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Exécute: 1️⃣ REGISTER
+   ↓ Copie accessToken et refreshToken
+
+2. Exécute: 2️⃣ LOGIN
+   ↓ Copie les nouveaux accessToken et refreshToken
+
+3. Exécute: 3️⃣ REFRESH TOKEN
+   ↓ Copie les nouveaux tokens (rotation)
+
+4. Exécute: ❌ TEST 5: REFRESH APRÈS LOGOUT
+   (Optionnel: avant logout pour vérifier que ça marche)
+
+5. Exécute: 4️⃣ LOGOUT
+   ↓ Revoque le refresh token
+
+6. Exécute: ❌ TEST 5: REFRESH APRÈS LOGOUT
+   (Maintenant ça doit échouer avec 401!)
+
+═══════════════════════════════════════════════════════════════════════════════

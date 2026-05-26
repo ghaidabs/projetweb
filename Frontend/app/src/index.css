@@ -1,0 +1,157 @@
+@font-face {
+  font-family: 'Geist Sans';
+  src: url('/fonts/Geist-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('/fonts/GeistMono-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 7% 11%;
+    --foreground: 0 0% 100%;
+    --card: 240 6% 15%;
+    --card-foreground: 0 0% 100%;
+    --popover: 240 6% 15%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 17 100% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 213 60% 57%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 240 5% 17%;
+    --muted-foreground: 240 5% 55%;
+    --accent: 17 100% 60%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 5% 20%;
+    --input: 240 5% 17%;
+    --ring: 17 100% 60%;
+    --radius: 0.75rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-covoit-bg text-white antialiased;
+    font-family: 'Geist Sans', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Geist Sans', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    background: rgba(35, 35, 40, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-navbar {
+    background: rgba(26, 26, 30, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .gradient-orange {
+    background: linear-gradient(135deg, #ff6b35 0%, #ff8c5a 100%);
+  }
+
+  .gradient-blue {
+    background: linear-gradient(135deg, #4a90d9 0%, #6bb3f0 100%);
+  }
+
+  .gradient-hero {
+    background: linear-gradient(180deg, #1a1a1e 0%, #252530 50%, #1a1a1e 100%);
+  }
+
+  .card-surface {
+    @apply bg-covoit-bg-secondary rounded-2xl;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .card-hover {
+    @apply transition-all duration-200 ease-out;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  }
+
+  .btn-primary {
+    @apply gradient-orange text-white font-medium px-6 py-3 rounded-xl transition-all duration-150;
+  }
+
+  .btn-primary:hover {
+    filter: brightness(1.1);
+  }
+
+  .btn-secondary {
+    @apply gradient-blue text-white font-medium px-6 py-3 rounded-xl transition-all duration-150;
+  }
+
+  .btn-secondary:hover {
+    filter: brightness(1.1);
+  }
+
+  .btn-ghost {
+    @apply border border-white/10 text-covoit-text-secondary font-medium px-6 py-3 rounded-xl transition-all duration-150 bg-transparent;
+  }
+
+  .btn-ghost:hover {
+    @apply bg-white/5 text-white;
+  }
+
+  .input-field {
+    @apply bg-covoit-bg-tertiary border border-white/[0.06] text-white placeholder:text-covoit-text-muted rounded-xl h-12 px-4 transition-all duration-150 outline-none w-full;
+  }
+
+  .input-field:focus {
+    @apply border-covoit-orange ring-2 ring-covoit-orange/20;
+  }
+
+  .status-pending {
+    @apply bg-covoit-warning/20 text-covoit-warning;
+  }
+
+  .status-confirmed {
+    @apply bg-covoit-success/20 text-covoit-success;
+  }
+
+  .status-rejected {
+    @apply bg-covoit-error/20 text-covoit-error;
+  }
+
+  .status-cancelled {
+    @apply bg-covoit-text-muted/20 text-covoit-text-muted;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
